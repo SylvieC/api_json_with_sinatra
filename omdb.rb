@@ -28,7 +28,11 @@ post '/result' do
   
   # Modify the html output so that a list of movies is provided.
   html_str = "<html><head><title>Movie Search Results</title></head><body><h1>Movie Results</h1>\n<ul>"
-  result["Search"].each do|movie_hash|   
+  # I wanted to create a movie hash where for each movie year is the key, and the value is
+  # an array of hashes { 2006 => [{"Title => " ", "imdbID} => "  "} {"Title" => , "imdbID" => }], 1665 => ..}
+  # but I realized it is much better to just use sort_by
+  sorted_by_year_hash = result["Search"].sort_by{|movie_hash| movie_hash["Year"]}
+  sorted_by_year_hash.each do|movie_hash|   
   html_str += "<li><a href='/poster/#{movie_hash["imdbID"]}'>Title: #{movie_hash["Title"]}, Year: #{movie_hash["Year"]}</a></li>"
   end
   html_str += "</ul></body></html>" 
